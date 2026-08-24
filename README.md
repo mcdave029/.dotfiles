@@ -6,13 +6,16 @@ Personal backup of my development environment setup
 Download the repo and start symlinking all the configuration files in each steps if needed.
 
 ### Terminal
-* Download [Iterm2](https://iterm2.com/downloads.html).
-* Integrate [tmux](https://www.iterm2.com/documentation-tmux-integration.html) in Iterm2.
+* Download [Ghostty](https://ghostty.org) (replaced iTerm2).
+* Install [tmux](https://github.com/tmux/tmux) — `brew install tmux` (config is a lean `.tmux.conf`, no longer [Oh My Tmux](https://github.com/gpakosz/.tmux)).
+* Install [TPM](https://github.com/tmux-plugins/tpm): `git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm`, then `prefix + I` inside tmux to install plugins.
+* Symlink the configs:
+  * `ln -sf $(pwd)/.tmux.conf ~/.tmux.conf`
+  * `ln -sf $(pwd)/ghostty/config.ghostty ~/Library/Application\ Support/com.mitchellh.ghostty/config.ghostty`
 * Install [ohmyzsh](https://github.com/ohmyzsh/ohmyzsh).
 * Install latest [vim](https://www.vim.org/) version.
 * Install [Commitizen](https://eidson.info/post/using-conventional-commit-messages-globally) globally.
-* Install [Nerd Font Space](https://www.nerdfonts.com) for Non-ASCII fonts.
-* Iterm2 Scheme [After Glow](https://iterm2colorschemes.com).
+* Install a [Nerd Font](https://www.nerdfonts.com) for Non-ASCII glyphs (tmux status line uses them).
 
 ### iOS Development
 * Install [Xcode](https://stackoverflow.com/a/10335943).

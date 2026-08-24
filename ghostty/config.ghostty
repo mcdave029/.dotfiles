@@ -1,0 +1,23 @@
+# Ghostty config — symlinked from
+# ~/Library/Application Support/com.mitchellh.ghostty/config.ghostty
+
+theme = Catppuccin Macchiato
+
+# --- tmux integration -------------------------------------------------------
+# Cmd+1..9 jumps to tmux window N (sends the C-b prefix, then the digit).
+# These override Ghostty's own goto_tab bindings — window management lives
+# in tmux, Ghostty is just the renderer.
+keybind = cmd+one=text:\x021
+keybind = cmd+two=text:\x022
+keybind = cmd+three=text:\x023
+keybind = cmd+four=text:\x024
+keybind = cmd+five=text:\x025
+keybind = cmd+six=text:\x026
+keybind = cmd+seven=text:\x027
+keybind = cmd+eight=text:\x028
+keybind = cmd+nine=text:\x029
+
+# Optional extras — uncomment to steal these from Ghostty too:
+# keybind = cmd+t=text:\x02c                 # new tmux window (replaces Ghostty new tab)
+# keybind = cmd+d=text:\x02|                 # split pane right
+# keybind = cmd+shift+d=text:\x02-           # split pane down
