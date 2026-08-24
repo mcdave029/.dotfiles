@@ -1,18 +1,18 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
+# Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
+# load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="spaceship"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -23,17 +23,16 @@ ZSH_THEME="spaceship"
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -45,6 +44,9 @@ ZSH_THEME="spaceship"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -64,8 +66,8 @@ ZSH_THEME="spaceship"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
@@ -83,275 +85,27 @@ source $ZSH/oh-my-zsh.sh
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
 # else
-#   export EDITOR='mvim'
+#   export EDITOR='nvim'
 # fi
 
 # Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# export ARCHFLAGS="-arch $(uname -m)"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# Set personal aliases, overriding those provided by Oh My Zsh libs,
+# plugins, and themes. Aliases can be placed here, though Oh My Zsh
+# users are encouraged to define aliases within a top-level file in
+# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
+# - $ZSH_CUSTOM/aliases.zsh
+# - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+export PATH="$HOME/.local/bin:$PATH"
 
-zstyle -s ":vcs_info:git:*:-all-" "command" _omz_git_git_cmd
-: ${_omz_git_git_cmd:=git}
+# asdf version manager (0.16+ / Go rewrite): put shims at the front of PATH
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
-#
-# Functions
-#
-
-# The name of the current branch
-# Back-compatibility wrapper for when this function was defined here in
-# the plugin, before being pulled in to core lib/git.zsh as git_current_branch()
-# to fix the core -> git plugin dependency.
-function current_branch() {
-  git_current_branch
-}
-# The list of remotes
-function current_repository() {
-  if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
-    return
-  fi
-  echo $($_omz_git_git_cmd remote -v | cut -d':' -f 2)
-}
-# Pretty log messages
-function _git_log_prettily(){
-  if ! [ -z $1 ]; then
-    git log --pretty=$1
-  fi
-}
-# Warn if the current branch is a WIP
-function work_in_progress() {
-  if $(git log -n 1 2>/dev/null | grep -q -c "\-\-wip\-\-"); then
-    echo "WIP!!"
-  fi
-}
-
-#
-# Aliases
-# (sorted alphabetically)
-#
-
-function stoproc() { 
-  local pid=3000
-  if [ ${#1} != 0 ]; then
-    pid=$1
-  fi
-  kill -9 $(lsof -i tcp:$pid -t) 
-}
-
-function clean_xcode() {
-  rm -rf ~/Library/Developer/Xcode/Archives/*
-  rm -rf ~/Library/Developer/Xcode/DerivedData/*-*
-}
-
-alias pg_start="launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
-alias pg_stop="launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
-alias be="bundle exec"
-alias be_silent="RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec"
-alias lc='colorls -lA --sd'
-alias recordsim="xcrun simctl io booted recordVideo --type=mp4 ~/Desktop/$(date +%d-%m-%yT%H-%M-%S).mp4"
-alias formatios='"/Users/mcdave/Developer/Voittle/config/spacecommander"/format-objc-files.sh -s'
-alias sshsync="rsync -avzhe ssh"
-alias ta="tmux a"
-alias tns="tmux new -s"
-alias restartpg="pg_ctl -D /usr/local/var/postgres stop -s -m fast && pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
-alias rdb="bundle exec rake db:drop && bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rake db:seed"
-alias rdbtest="bundle exec rake db:drop test && bundle exec rake db:create test && bundle exec rake db:migrate test && bundle exec rake db:seed test"
-
-alias g='git'
-
-alias ga='git add'
-alias gaa='git add --all'
-alias gapa='git add --patch'
-
-alias gblist="git for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'"
-alias gb='git branch'
-alias gba='git branch -a'
-alias gbda='git branch --merged | command grep -vE "^(\*|\s*master\s*$)" | command xargs -n 1 git branch -d'
-alias gbl='git blame -b -w'
-alias gbnm='git branch --no-merged'
-alias gbr='git branch --remote'
-alias gbs='git bisect'
-alias gbsb='git bisect bad'
-alias gbsg='git bisect good'
-alias gbsr='git bisect reset'
-alias gbss='git bisect start'
-
-alias gc='git commit -v'
-alias gc!='git commit -v --amend'
-alias gca='git commit -v -a'
-alias gca!='git commit -v -a --amend'
-alias gcan!='git commit -v -a -s --no-edit --amend'
-alias gcam='git commit -a -m'
-alias gcb='git checkout -b'
-alias gcf='git config --list'
-alias gcl='git clone --recursive'
-alias gclean='git clean -fd'
-alias gpristine='git reset --hard && git clean -dfx'
-alias gcm='git checkout master'
-alias gcmsg='git commit -m'
-alias gco='git checkout'
-alias gcount='git shortlog -sn'
-compdef gcount=git
-alias gcp='git cherry-pick'
-alias gcs='git commit -S'
-
-alias gd='git diff'
-alias gdca='git diff --cached'
-alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
-alias gdt='git diff-tree --no-commit-id --name-only -r'
-gdv() { git diff -w "$@" | view - }
-compdef _git gdv=git-diff
-alias gdw='git diff --word-diff'
-
-alias gf='git fetch'
-alias gfa='git fetch --all --prune'
-function gfg() { git ls-files | grep $@ }
-compdef gfg=grep
-alias gfo='git fetch origin'
-
-alias gg='git gui citool'
-alias gga='git gui citool --amend'
-ggf() {
-[[ "$#" != 1 ]] && local b="$(git_current_branch)"
-git push --force origin "${b:=$1}"
-}
-compdef _git ggf=git-checkout
-ggl() {
-if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
-git pull origin "${*}"
-else
-[[ "$#" == 0 ]] && local b="$(git_current_branch)"
-git pull origin "${b:=$1}"
-fi
-}
-compdef _git ggl=git-checkout
-alias ggpull='git pull origin $(git_current_branch)'
-compdef _git ggpull=git-checkout
-ggp() {
-if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
-git push origin "${*}"
-else
-[[ "$#" == 0 ]] && local b="$(git_current_branch)"
-git push origin "${b:=$1}"
-fi
-}
-compdef _git ggp=git-checkout
-alias ggpush='git push origin $(git_current_branch)'
-compdef _git ggpush=git-checkout
-ggpnp() {
-if [[ "$#" == 0 ]]; then
-ggl && ggp
-else
-ggl "${*}" && ggp "${*}"
-fi
-}
-compdef _git ggpnp=git-checkout
-alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
-ggu() {
-[[ "$#" != 1 ]] && local b="$(git_current_branch)"
-git pull --rebase origin "${b:=$1}"
-}
-compdef _git ggu=git-checkout
-alias ggpur='ggu'
-compdef _git ggpur=git-checkout
-
-alias gignore='git update-index --assume-unchanged'
-alias gignored='git ls-files -v | grep "^[[:lower:]]"'
-alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
-compdef git-svn-dcommit-push=git
-
-alias gk='\gitk --all --branches'
-compdef _git gk='gitk'
-alias gke='\gitk --all $(git log -g --pretty=format:%h)'
-compdef _git gke='gitk'
-
-alias gl='git pull'
-alias glg='git log --stat --color'
-alias glgp='git log --stat --color -p'
-alias glgg='git log --graph --color'
-alias glgga='git log --graph --decorate --all'
-alias glgm='git log --graph --max-count=10'
-alias glo='git log --oneline --decorate --color'
-alias glol="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias glola="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all"
-alias glog='git log --oneline --decorate --color --graph'
-alias glp="_git_log_prettily"
-compdef _git glp=git-log
-
-alias gm='git merge'
-alias gmom='git merge origin/master'
-alias gmt='git mergetool --no-prompt'
-alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
-alias gmum='git merge upstream/master'
-
-alias gp='git push'
-alias gpd='git push --dry-run'
-alias gpoat='git push origin --all && git push origin --tags'
-compdef _git gpoat=git-push
-alias gpu='git push upstream'
-alias gpv='git push -v'
-
-alias gr='git remote'
-alias gra='git remote add'
-alias grb='git rebase'
-alias grba='git rebase --abort'
-alias grbc='git rebase --continue'
-alias grbi='git rebase -i'
-alias grbm='git rebase master'
-alias grbs='git rebase --skip'
-alias grh='git reset HEAD'
-alias grhh='git reset HEAD --hard'
-alias grmv='git remote rename'
-alias grrm='git remote remove'
-alias grset='git remote set-url'
-alias grt='cd $(git rev-parse --show-toplevel || echo ".")'
-alias gru='git reset --'
-alias grup='git remote update'
-alias grv='git remote -v'
-
-alias gsb='git status -sb'
-alias gsd='git svn dcommit'
-alias gsi='git submodule init'
-alias gsps='git show --pretty=short --show-signature'
-alias gsr='git svn rebase'
-alias gss='git status -s'
-alias gst='git status'
-alias gsta='git stash'
-alias gstaa='git stash apply'
-alias gstd='git stash drop'
-alias gstl='git stash list'
-alias gstp='git stash pop'
-alias gsts='git stash show --text'
-alias gsu='git submodule update'
-
-alias gts='git tag -s'
-alias gtv='git tag | sort -V'
-
-alias gunignore='git update-index --no-assume-unchanged'
-alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
-alias gup='git pull --rebase'
-alias gupv='git pull --rebase -v'
-alias glum='git pull upstream master'
-
-alias gvt='git verify-tag'
-
-alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
-alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'
-
-export LC_ALL=en_US.UTF-8
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
-
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
-
-export PATH="/usr/local/sbin:$PATH"
+# tmux: attach to the main session, creating it if needed
+alias tm='tmux new -A -s main'
