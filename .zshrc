@@ -109,3 +109,6 @@ export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 # tmux: attach to the main session, creating it if needed
 alias tm='tmux new -A -s main'
+alias ta='tmux a'         # reattach to the most recent session
+alias tns='tmux new -s'   # new named session: tns api
+alias tls='tmux ls'       # list sessions
