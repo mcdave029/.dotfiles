@@ -35,10 +35,10 @@ call plug#begin('~/.vim/plugged')
   Plug 'vim-syntastic/syntastic'
   Plug 'ryanoasis/vim-devicons'
   Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  Plug 'valloric/MatchTagAlways'
+  " Plug 'valloric/MatchTagAlways'
   Plug 'posva/vim-vue'
   Plug 'JamshedVesuna/vim-markdown-preview'
-  Plug 'wakatime/vim-wakatime'
+  " Plug 'wakatime/vim-wakatime'
   Plug 'milch/vim-fastlane'
   Plug 'scrooloose/nerdcommenter'
   Plug 'leafgarland/typescript-vim'
@@ -57,6 +57,7 @@ map <C-j> :MtaJumpToOtherTag<cr>
 "augroup End
 
 let NERDTreeShowHidden=1
+let g:NERDTreeMinimalMenu=1
 let g:ctrlp_show_hidden=1
 
 let g:airline_powerline_fonts = 1
@@ -98,6 +99,7 @@ let g:syntastic_check_on_w = 1
 let g:syntastic_vue_checkers = ['eslint', 'eslint-plugin-vue']
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_eslint_exe = 'npm run lint --'
+let g:syntastic_ruby_rubocop_exe = 'bundle exec rubocop'
 let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 let g:syntastic_scss_checkers = ['scss_lint']
 let g:syntastic_haml_checkers = ['haml_lint']
