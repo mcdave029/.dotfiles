@@ -112,3 +112,6 @@ alias tm='tmux new -A -s main'
 alias ta='tmux a'         # reattach to the most recent session
 alias tns='tmux new -s'   # new named session: tns api
 alias tls='tmux ls'       # list sessions
+
+# Machine-specific config and secrets (untracked): API keys, local paths, per-machine env
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
